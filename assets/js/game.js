@@ -7,14 +7,14 @@ window.onload = function() {
     { preload: preload, create: create, update: update });
 
     function preload() {
-        console.log('preload');
+
     }
 
     function create() {
-        console.log('create');
+        
     }
 
     function update() {
-        
+
     }
 }
