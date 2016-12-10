@@ -1,44 +1,102 @@
 
-var WIDTH = 455;
-var HEIGHT = 250;
-
+var WIDTH = 800;
+var HEIGHT = 600;
+var game;
 window.onload = function() {
-    var game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, '',
+    game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, '',
     { preload: preload, create: create, update: update });
 
     function preload() {
-        game.load.baseURL = 'http://examples.phaser.io/assets/';
-        game.load.crossOrigin = 'anonymous';
-        game.load.image('background', 'games/starstruck/background.png');
-        game.load.image('platform', 'sprites/block.png');
-        game.load.spritesheet('player', 'games/starstruck/dude.png', 32, 48);
+
+        game.stage.backgroundColor = '#000';
+
+        //tiled map
+        game.load.tilemap('takedown', 'assets/cs2d-resources/maps/takedown.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.image('tiles', 'assets/cs2d-resources/gfx/Tiles/dust.bmp');
+
+
+        //characters
+        game.load.spritesheet('police', 'assets/cs2d-resources/gfx/player/ct3.png', 32, 32, 6);
+        game.load.spritesheet('terrorist', 'assets/cs2d-resources/gfx/player/t4.png', 32, 32, 6);
+
+        //legs
+        game.load.spritesheet('legs', 'assets/cs2d-resources/gfx/player/legs-t.png', 32, 32, 8);
+
+        //background
+        game.load.image('background', 'assets/cs2d-resources/gfx/backgrounds/stone1.jpg');
+
+        //weapons
+        game.load.image('ak47', 'assets/cs2d-resources/gfx/weapons2/ak47.png');
+        game.load.image('m249', 'assets/cs2d-resources/gfx/weapons2/m249.png');
+        game.load.image('xm1014', 'assets/cs2d-resources/gfx/weapons2/xm1014.png');
 
     }
 
-    var platforms;
-    function create() {
-        game.add.sprite(0, 0, 'background');
-        game.add.sprite(100, 0, 'background');
-        game.add.sprite(200, 0, 'background');
-        game.add.sprite(300, 0, 'background');
-        var platform = game.add.sprite(230, HEIGHT-50, 'platform');
-        platform.scale.setTo(0.5, 0.5);
+    var map;
+    var layer;
+    var cursors;
+    var player;
+    var animPlayer;
 
-        //enable the Arcade Physics system
+    var legs;
+    var animLegs;
+
+    var player2;
+
+    var ak47;
+
+    function create() {
+
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        //creating group
-        platforms = game.add.group();
+        //background
+        game.add.tileSprite(0, 0, 2080, 1440, 'background');
 
-        //enable physics for any object that is created in this group
-        platforms.enableBody = true;
+        //map
+        map = game.add.tilemap('takedown');
+        map.addTilesetImage('dust', 'tiles');
 
-        //creating ground
-        var ground = platforms.create(0, game.world.height - 64, 'platform');
-        
+        layer = map.createLayer('Layer1');
+        layer.resizeWorld();
+
+
+        cursors = game.input.keyboard.createCursorKeys();
+
+        player2 = new Character('terrorist', 580, 430, true);
+
+        ak47 = new Weapon('m249', 300, 300);
     }
 
     function update() {
 
+        player2.update();
+
+        // player.body.velocity.x = 0;
+        // player.body.velocity.y = 0;
+        //
+        // legs.body.velocity.x = 0;
+        // legs.body.velocity.y = 0;
+        //
+        // player.body.angularVelocity = 0;
+        // legs.body.angularVelocity = 0;
+
+        if(cursors.left.isDown) {
+            // player.body.angularVelocity = -150;
+            // legs.body.angularVelocity = -150;
+        }
+        else if(cursors.right.isDown) {
+            // player.body.angularVelocity = 150;
+            // legs.body.angularVelocity = 150;
+        }
+
+        if(cursors.up.isDown) {
+
+        }
+
     }
+
+    function render() {
+
+    }
+
 }
