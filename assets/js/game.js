@@ -79,7 +79,7 @@ window.onload = function() {
 
         cursors = game.input.keyboard.createCursorKeys();
 
-        player2 = new Character('terrorist', 580, 430, true);
+        player2 = new Character('terrorist', 580, 430, true, userController);
 
         //pointer
         pointer = game.add.sprite(game.input.mousePointer.x, game.input.mousePointer.y, 'pointer', 1);

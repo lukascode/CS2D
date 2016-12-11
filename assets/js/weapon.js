@@ -97,7 +97,7 @@ function Weapon(key, x, y) {
             if(this.bullets > 0) {
                 playShootSound();
                 this.sprite.angle -= 90;
-                weapon.fire();
+                if(this.key != 'knife') weapon.fire();
                 this.sprite.angle += 90;
                 if(key != 'knife') this.bullets -= 1;
             } else { noammo.restart(); }

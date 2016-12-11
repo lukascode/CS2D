@@ -5,8 +5,6 @@ var defaultVelocity = 110;
 var defaultLegsAnimationSpeed = 15;
 var defaultVelocityRun = 200;
 var defaultLegsAnimationSpeedRun = 20;
-var defaultVelocityNormal = defaultVelocity;
-var defaultLegsAnimationSpeedNormal = defaultLegsAnimationSpeed;
 
 var defaultReloadAnimationSpeed = 0;
 var defaultWeaponPivotValueM249 = { x: 5, y: 15 };
@@ -14,7 +12,7 @@ var defaultWeaponPivotValueAK47 = { x: 3, y: 12 };
 var defaultWeaponPivotValueXM1014 = { x: 0, y: 21 };
 var defaultWeaponPivotValueKNIFE = { x: 0, y: 10 };
 
-function Character(key, x, y, cameraFollow) {
+function Character(key, x, y, cameraFollow, controller) {
 
     //legs and legs's animation
     this.legs = game.add.sprite(x, y, 'legs', 0);
@@ -32,6 +30,19 @@ function Character(key, x, y, cameraFollow) {
         game.camera.follow(this.sprite);
     }
 
+    //velocities
+    this.velocity = defaultVelocity;
+    this.legsAnimationSpeed = defaultLegsAnimationSpeed;
+
+    this.runModeOn = function() {
+        this.velocity = defaultVelocityRun;
+        this.legsAnimationSpeed = defaultLegsAnimationSpeedRun;
+    }
+    this.runModeOff = function() {
+        this.velocity = defaultVelocity;
+        this.legsAnimationSpeed = defaultLegsAnimationSpeedRun;
+    }
+
     //reload animation
     this.spriteReloadAnimation = this.sprite.animations.add('reloadAnimation', [0, 1, 2, 3, 4, 5]);
 
@@ -42,50 +53,67 @@ function Character(key, x, y, cameraFollow) {
     //weapons
     this.weapons = [ new Weapon('knife', x, y), new Weapon('xm1014', x, y), new Weapon('ak47', x, y), new Weapon('m249', x, y) ];
     for(var i=1; i<this.weapons.length; ++i) { this.weapons[i].invisible(); }
-    var currentWeapon = 0;
+    this.currentWeapon = 0;
 
     this.switchWeapon = function() {
-        this.weapons[currentWeapon].invisible();
-        if(currentWeapon < this.weapons.length-1) {
-            ++currentWeapon;
+        this.weapons[this.currentWeapon].invisible();
+        if(this.currentWeapon < this.weapons.length-1) {
+            ++this.currentWeapon;
         }
         else {
-            currentWeapon = 0;
+            this.currentWeapon = 0;
         }
-        this.weapons[currentWeapon].setPosition(this.sprite.x, this.sprite.y);
-        this.weapons[currentWeapon].visible();
+        this.weapons[this.currentWeapon].setPosition(this.sprite.x, this.sprite.y);
+        this.weapons[this.currentWeapon].visible();
     }
-    var switchWeaponFlag = false;
+    this.switchWeaponFlag = false;
 
     this.reload = function() {
         this.spriteReloadAnimation.play(defaultReloadAnimationSpeed, false);
-        this.weapons[currentWeapon].reload();
+        this.weapons[this.currentWeapon].reload();
     }
 
     //audio
     var dirt1 = game.add.audio('dirt1');
 
-    function playWalkSound() {
+    this.playWalkSound = function() {
         if(!dirt1.isPlaying)
             dirt1.restart();
     }
 
 
     this.goUp = function() {
-        this.sprite.body.velocity.y = -defaultVelocity;
-        this.legs.body.velocity.y = -defaultVelocity;
+        this.sprite.body.velocity.y = -this.velocity;
+        this.legs.body.velocity.y = -this.velocity;
+        this.playWalkSound();
     }
     this.goDown = function() {
-        this.sprite.body.velocity.y = defaultVelocity;
-        this.legs.body.velocity.y = defaultVelocity;
+        this.sprite.body.velocity.y = this.velocity;
+        this.legs.body.velocity.y = this.velocity;
+        this.playWalkSound();
     }
     this.goLeft = function() {
-        this.sprite.body.velocity.x = -defaultVelocity;
-        this.legs.body.velocity.x = -defaultVelocity;
+        this.sprite.body.velocity.x = -this.velocity;
+        this.legs.body.velocity.x = -this.velocity;
+        this.playWalkSound();
     }
     this.goRight = function() {
-        this.sprite.body.velocity.x = defaultVelocity;
-        this.legs.body.velocity.x = defaultVelocity;
+        this.sprite.body.velocity.x = this.velocity;
+        this.legs.body.velocity.x = this.velocity;
+        this.playWalkSound();
+    }
+    this.goForward = function() {
+        this.sprite.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(this.sprite.angle-90, this.velocity));
+        if(!this.legsAnimation.isPlaying) {
+            this.legsAnimation.play(this.legsAnimationSpeed, true);
+        }
+        this.playWalkSound();
+    }
+
+    this.updateBody = function() {
+        this.updateLegs();
+        this.updateWeapon();
+        this.changeSpriteFrameDependsOnWeapon();
     }
 
     this.kill = function() {
@@ -109,86 +137,33 @@ function Character(key, x, y, cameraFollow) {
         this.legs.y = this.sprite.y;
     }
     this.updateWeapon = function() {
-        this.weapons[currentWeapon].setRotation(this.sprite.rotation);
-        this.weapons[currentWeapon].setPosition(this.sprite.x, this.sprite.y);
-        switch(this.weapons[currentWeapon].key) {
+        this.weapons[this.currentWeapon].setRotation(this.sprite.rotation);
+        this.weapons[this.currentWeapon].setPosition(this.sprite.x, this.sprite.y);
+        switch(this.weapons[this.currentWeapon].key) {
             case 'ak47':
-                this.weapons[currentWeapon].setPivot(defaultWeaponPivotValueAK47.x, defaultWeaponPivotValueAK47.y);
+                this.weapons[this.currentWeapon].setPivot(defaultWeaponPivotValueAK47.x, defaultWeaponPivotValueAK47.y);
             break;
             case 'm249':
-                this.weapons[currentWeapon].setPivot(defaultWeaponPivotValueM249.x, defaultWeaponPivotValueM249.y);
+                this.weapons[this.currentWeapon].setPivot(defaultWeaponPivotValueM249.x, defaultWeaponPivotValueM249.y);
             break;
             case 'xm1014':
-                this.weapons[currentWeapon].setPivot(defaultWeaponPivotValueXM1014.x, defaultWeaponPivotValueXM1014.y);
+                this.weapons[this.currentWeapon].setPivot(defaultWeaponPivotValueXM1014.x, defaultWeaponPivotValueXM1014.y);
             break;
             case 'knife':
-                this.weapons[currentWeapon].setPivot(defaultWeaponPivotValueKNIFE.x, defaultWeaponPivotValueKNIFE.y);
+                this.weapons[this.currentWeapon].setPivot(defaultWeaponPivotValueKNIFE.x, defaultWeaponPivotValueKNIFE.y);
             break;
         }
     }
 
     this.changeSpriteFrameDependsOnWeapon = function() {
-        if(this.weapons[currentWeapon].key != 'xm1014') {
+        if(this.weapons[this.currentWeapon].key != 'xm1014') {
             this.sprite.frame = 1;
         } else {
             this.sprite.frame = 3;
         }
     }
 
-    this.update = function() {
-        this.sprite.body.velocity.setTo(0, 0);
-        this.legs.body.velocity.setTo(0, 0);
 
-        this.sprite.rotation = game.physics.arcade.angleToPointer(this.sprite) + Math.PI/2;
-        this.updateLegs();
-        this.updateWeapon();
-        this.changeSpriteFrameDependsOnWeapon();
-
-        if(game.input.keyboard.isDown(Phaser.Keyboard.W)) {
-            this.sprite.body.velocity.copyFrom(game.physics.arcade.velocityFromAngle(this.sprite.angle-90, defaultVelocity));
-
-
-            if(!this.legsAnimation.isPlaying) {
-                this.legsAnimation.play(defaultLegsAnimationSpeed, true);
-            }
-            playWalkSound();
-        } else {
-            this.legsAnimation.loop = false;
-        }
-
-        if(game.input.keyboard.isDown(Phaser.Keyboard.S)) {
-            this.goDown();
-            playWalkSound();
-        }
-        if(game.input.keyboard.isDown(Phaser.Keyboard.A)) {
-            this.goLeft();
-            playWalkSound();
-        }
-        if(game.input.keyboard.isDown(Phaser.Keyboard.D)) {
-            this.goRight();
-            playWalkSound();
-        }
-        if(game.input.keyboard.isDown(Phaser.Keyboard.Q)) {
-            if(!switchWeaponFlag) {
-                this.switchWeapon();
-                switchWeaponFlag= true;
-            }
-        } else switchWeaponFlag = false;
-        if(game.input.keyboard.isDown(Phaser.Keyboard.R)) {
-            this.reload();
-        }
-        if(game.input.keyboard.isDown(Phaser.Keyboard.SHIFT)) {
-            defaultVelocity = defaultVelocityRun;
-            defaultLegsAnimationSpeed = defaultLegsAnimationSpeedRun;
-        } else {
-            defaultVelocity = defaultVelocityNormal;
-            defaultLegsAnimationSpeed = defaultLegsAnimationSpeedNormal;
-        }
-        if(game.input.mousePointer.isDown) {
-                this.weapons[currentWeapon].shoot();
-        }
-
-
-    }
+    this.update = controller.bind(this);
 
 };
