@@ -30,7 +30,7 @@ window.onload = function() {
         game.load.image('m249', 'assets/cs2d-resources/gfx/weapons2/m249.png');
         game.load.image('xm1014', 'assets/cs2d-resources/gfx/weapons2/xm1014.png');
         game.load.image('knife', 'assets/cs2d-resources/gfx/weapons2/knife.png');
-        game.load.image('bullet', 'assets/cs2d-resources/gfx/weapons2/bullet.png');
+        game.load.image('bullet', 'assets/cs2d-resources/gfx/weapons2/bullet3.png');
 
         //pointer
         game.load.spritesheet('pointer', 'assets/cs2d-resources/gfx/pointer2.png', 23, 23, 4);
