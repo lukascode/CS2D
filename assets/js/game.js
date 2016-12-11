@@ -80,11 +80,12 @@ window.onload = function() {
         player2 = new Character('terrorist', 580, 430, true);
 
         //pointer
-        pointer = game.add.sprite(game.input.mousePointer.x, game.input.mousePointer.y, 'pointer', 0);
+        pointer = game.add.sprite(game.input.mousePointer.x, game.input.mousePointer.y, 'pointer', 1);
+        pointer.anchor.setTo(0.5, 0.5);
         game.physics.enable(pointer);
 
         game.input.addMoveCallback = function(pointer, x, y) {
-            console.log(x + ' ' + y);
+            //console.log(x + ' ' + y);
         }
 
 
@@ -109,8 +110,8 @@ window.onload = function() {
     }
 
     function updatePointer() {
-        pointer.x = game.input.activePointer.position.x;
-        pointer.y = game.input.activePointer.position.y;
+        pointer.x = game.camera.x + game.input.activePointer.position.x;
+        pointer.y = game.camera.y + game.input.activePointer.position.y;
     }
 
     function render() {
