@@ -1,7 +1,13 @@
 //DEFAULT VARIABLES
 var defaultLife = 100;
+
 var defaultVelocity = 110;
 var defaultLegsAnimationSpeed = 15;
+var defaultVelocityRun = 200;
+var defaultLegsAnimationSpeedRun = 20;
+var defaultVelocityNormal = defaultVelocity;
+var defaultLegsAnimationSpeedNormal = defaultLegsAnimationSpeed;
+
 var defaultReloadAnimationSpeed = 0;
 var defaultWeaponPivotValueM249 = { x: 5, y: 15 };
 var defaultWeaponPivotValueAK47 = { x: 3, y: 12 };
@@ -20,6 +26,7 @@ function Character(key, x, y, cameraFollow) {
     this.sprite = game.add.sprite(x, y, key, 1);
     game.physics.enable(this.sprite);
     this.sprite.anchor.setTo(0.5, 0.5);
+    this.sprite.body.collideWorldBounds = true;
 
     if(cameraFollow) {
         game.camera.follow(this.sprite);
@@ -169,6 +176,13 @@ function Character(key, x, y, cameraFollow) {
         } else switchWeaponFlag = false;
         if(game.input.keyboard.isDown(Phaser.Keyboard.R)) {
             this.reload();
+        }
+        if(game.input.keyboard.isDown(Phaser.Keyboard.SHIFT)) {
+            defaultVelocity = defaultVelocityRun;
+            defaultLegsAnimationSpeed = defaultLegsAnimationSpeedRun;
+        } else {
+            defaultVelocity = defaultVelocityNormal;
+            defaultLegsAnimationSpeed = defaultLegsAnimationSpeedNormal;
         }
         if(game.input.mousePointer.isDown) {
                 this.weapons[currentWeapon].shoot();

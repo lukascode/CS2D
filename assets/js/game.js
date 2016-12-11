@@ -74,6 +74,8 @@ window.onload = function() {
         layer = map.createLayer('Layer1');
         layer.resizeWorld();
 
+        map.setCollision([2, 3, 4, 5, 6, 7, 8, 21, 22, 23, 24, 59, 60, 61, 62, 63, 64, 67, 68, 75, 76, 77]);
+
 
         cursors = game.input.keyboard.createCursorKeys();
 
@@ -95,6 +97,8 @@ window.onload = function() {
 
         player2.update();
          updatePointer();
+
+         game.physics.arcade.collide(player2.sprite, layer);
 
         if(cursors.left.isDown) {
 
