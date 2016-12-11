@@ -39,6 +39,14 @@ window.onload = function() {
         game.load.audio('deagle_shoot', 'assets/cs2d-resources/sfx/weapons2/deagle.wav');
         game.load.audio('m249_shoot', 'assets/cs2d-resources/sfx/weapons2/m249.wav');
         game.load.audio('knife_shoot', 'assets/cs2d-resources/sfx/weapons2/knife_hitwall.wav');
+        game.load.audio('noammo', 'assets/cs2d-resources/sfx/weapons2/empty.wav');
+        game.load.audio('reload_weapon', 'assets/cs2d-resources/sfx/weapons2/reload.wav');
+        game.load.audio('reload_weapon2', 'assets/cs2d-resources/sfx/weapons2/reload2.wav');
+
+        game.load.audio('dirt1', 'assets/cs2d-resources/sfx/player2/pl_dirt1.wav');
+        game.load.audio('dirt2', 'assets/cs2d-resources/sfx/player2/pl_dirt2.wav');
+        game.load.audio('dirt3', 'assets/cs2d-resources/sfx/player2/pl_dirt3.wav');
+        game.load.audio('dirt4', 'assets/cs2d-resources/sfx/player2/pl_dirt4.wav');
 
     }
 

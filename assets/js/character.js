@@ -2,6 +2,7 @@
 var defaultLife = 100;
 var defaultVelocity = 110;
 var defaultLegsAnimationSpeed = 15;
+var defaultReloadAnimationSpeed = 0;
 var defaultWeaponPivotValueM249 = { x: 5, y: 15 };
 var defaultWeaponPivotValueAK47 = { x: 3, y: 12 };
 var defaultWeaponPivotValueXM1014 = { x: 0, y: 21 };
@@ -23,6 +24,9 @@ function Character(key, x, y, cameraFollow) {
     if(cameraFollow) {
         game.camera.follow(this.sprite);
     }
+
+    //reload animation
+    this.spriteReloadAnimation = this.sprite.animations.add('reloadAnimation', [0, 1, 2, 3, 4, 5]);
 
     var life = defaultLife;
     this.getLife = function() { return life; }
@@ -47,9 +51,17 @@ function Character(key, x, y, cameraFollow) {
     var switchWeaponFlag = false;
 
     this.reload = function() {
-
+        this.spriteReloadAnimation.play(defaultReloadAnimationSpeed, false);
+        this.weapons[currentWeapon].reload();
     }
 
+    //audio
+    var dirt1 = game.add.audio('dirt1');
+
+    function playWalkSound() {
+        if(!dirt1.isPlaying)
+            dirt1.restart();
+    }
 
 
     this.goUp = function() {
@@ -132,18 +144,22 @@ function Character(key, x, y, cameraFollow) {
             if(!this.legsAnimation.isPlaying) {
                 this.legsAnimation.play(defaultLegsAnimationSpeed, true);
             }
+            playWalkSound();
         } else {
             this.legsAnimation.loop = false;
         }
 
         if(game.input.keyboard.isDown(Phaser.Keyboard.S)) {
             this.goDown();
+            playWalkSound();
         }
         if(game.input.keyboard.isDown(Phaser.Keyboard.A)) {
             this.goLeft();
+            playWalkSound();
         }
         if(game.input.keyboard.isDown(Phaser.Keyboard.D)) {
             this.goRight();
+            playWalkSound();
         }
         if(game.input.keyboard.isDown(Phaser.Keyboard.Q)) {
             if(!switchWeaponFlag) {
@@ -151,6 +167,9 @@ function Character(key, x, y, cameraFollow) {
                 switchWeaponFlag= true;
             }
         } else switchWeaponFlag = false;
+        if(game.input.keyboard.isDown(Phaser.Keyboard.R)) {
+            this.reload();
+        }
         if(game.input.mousePointer.isDown) {
                 this.weapons[currentWeapon].shoot();
         }
