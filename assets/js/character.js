@@ -1,6 +1,6 @@
 //DEFAULT VARIABLES
 var defaultLife = 100;
-var defaultVelocity = 70;
+var defaultVelocity = 110;
 var defaultLegsAnimationSpeed = 15;
 var defaultWeaponPivotValueM249 = { x: 5, y: 15 };
 var defaultWeaponPivotValueAK47 = { x: 3, y: 12 };
@@ -41,6 +41,7 @@ function Character(key, x, y, cameraFollow) {
         else {
             currentWeapon = 0;
         }
+        this.weapons[currentWeapon].setPosition(this.sprite.x, this.sprite.y);
         this.weapons[currentWeapon].visible();
     }
     var switchWeaponFlag = false;
