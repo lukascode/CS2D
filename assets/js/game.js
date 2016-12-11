@@ -1,6 +1,6 @@
 
-var WIDTH = 800;
-var HEIGHT = 600;
+var WIDTH = 1024;
+var HEIGHT = 576;
 var game;
 window.onload = function() {
     game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, '',
@@ -29,21 +29,27 @@ window.onload = function() {
         game.load.image('ak47', 'assets/cs2d-resources/gfx/weapons2/ak47.png');
         game.load.image('m249', 'assets/cs2d-resources/gfx/weapons2/m249.png');
         game.load.image('xm1014', 'assets/cs2d-resources/gfx/weapons2/xm1014.png');
+        game.load.image('knife', 'assets/cs2d-resources/gfx/weapons2/knife.png')
+
+        //pointer
+        game.load.spritesheet('pointer', 'assets/cs2d-resources/gfx/pointer2.png', 23, 23, 4);
+
+        //audio
+        game.load.audio('ak47_shoot', 'assets/cs2d-resources/sfx/weapons2/ak47.wav');
+        game.load.audio('deagle_shoot', 'assets/cs2d-resources/sfx/weapons2/deagle.wav');
+        game.load.audio('m249_shoot', 'assets/cs2d-resources/sfx/weapons2/m249.wav');
+        game.load.audio('knife_shoot', 'assets/cs2d-resources/sfx/weapons2/knife_hitwall.wav');
 
     }
 
     var map;
     var layer;
     var cursors;
-    var player;
-    var animPlayer;
-
-    var legs;
-    var animLegs;
 
     var player2;
+    var pointer;
 
-    var ak47;
+
 
     function create() {
 
@@ -62,31 +68,29 @@ window.onload = function() {
 
         cursors = game.input.keyboard.createCursorKeys();
 
-        player2 = new Character('terrorist', 580, 430, true);
+        player2 = new Character('police', 580, 430, true);
 
-        ak47 = new Weapon('m249', 300, 300);
+        //pointer
+        // pointer = game.add.sprite(game.input.mousePointer.x, game.input.mousePointer.y, 'pointer', 0);
+        // game.physics.enable(pointer);
+
+        // game.input.addMoveCallback = function(pointer, x, y) {
+        //     console.log(x + ' ' + y);
+        // }
+
+
     }
 
     function update() {
 
         player2.update();
-
-        // player.body.velocity.x = 0;
-        // player.body.velocity.y = 0;
-        //
-        // legs.body.velocity.x = 0;
-        // legs.body.velocity.y = 0;
-        //
-        // player.body.angularVelocity = 0;
-        // legs.body.angularVelocity = 0;
+        // updatePointer();
 
         if(cursors.left.isDown) {
-            // player.body.angularVelocity = -150;
-            // legs.body.angularVelocity = -150;
+
         }
         else if(cursors.right.isDown) {
-            // player.body.angularVelocity = 150;
-            // legs.body.angularVelocity = 150;
+
         }
 
         if(cursors.up.isDown) {
@@ -94,6 +98,11 @@ window.onload = function() {
         }
 
     }
+
+    // function updatePointer() {
+    //     pointer.x = game.input.activePointer.position.x;
+    //     pointer.y = game.input.activePointer.position.y;
+    // }
 
     function render() {
 
