@@ -152,7 +152,7 @@ function Character(key, x, y, cameraFollow) {
             }
         } else switchWeaponFlag = false;
         if(game.input.mousePointer.isDown) {
-            this.weapons[currentWeapon].shoot();
+                this.weapons[currentWeapon].shoot();
         }
 
 

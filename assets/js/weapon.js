@@ -1,3 +1,9 @@
+//DEFAULT VARIABLES
+var default_ak47_delay = 200;
+var default_deagle_delay = 300;
+var default_m249_delay = 100;
+var default_knife_delay = 300;
+
 
 function Weapon(key, x, y) {
     this.key = key;
@@ -29,12 +35,14 @@ function Weapon(key, x, y) {
     var m249_shoot = game.add.audio('m249_shoot');
     var knife_shoot = game.add.audio('knife_shoot');
 
+    var weapon_lastTime = game.time.now;
+
     function playShootSound() {
         switch(key) {
-            case 'ak47':   if(!ak47_shoot.isPlaying)   ak47_shoot.play();   break;
-            case 'm249':   if(!m249_shoot.isPlaying)  m249_shoot.play();   break;
-            case 'xm1014': if(!deagle_shoot.isPlaying) deagle_shoot.play(); break;
-            case 'knife':  if(!knife_shoot.isPlaying)  knife_shoot.play();  break;
+            case 'ak47':   ak47_shoot.restart();   break;
+            case 'm249':   m249_shoot.restart();   break;
+            case 'xm1014': deagle_shoot.restart(); break;
+            case 'knife':  knife_shoot.restart();  break;
         }
     }
 
@@ -46,10 +54,28 @@ function Weapon(key, x, y) {
     }
 
     this.shoot = function() {
-        //if(this.bullets > 0) {
-            //sound
-            playShootSound();
-            this.bullets -= 1;
-        //}
+        if(isTimeElapsedForNextShoot()) {
+            if(this.bullets > 0) {
+                //sound
+                playShootSound();
+                //this.bullets -= 1;
+            }
+        }
     }
+
+    function isTimeElapsedForNextShoot() {
+        var timeElapsed = game.time.now - weapon_lastTime;
+        var defaultDelay;
+        switch(key) {
+            case 'ak47': defaultDelay = default_ak47_delay; break;
+            case 'm249': defaultDelay = default_m249_delay; break;
+            case 'xm1014': defaultDelay = default_deagle_delay; break;
+            case 'knife': defaultDelay = default_knife_delay; break;
+        }
+        if(timeElapsed >= defaultDelay) {
+            weapon_lastTime = game.time.now;
+            return true;
+        } else return false;
+    }
+
 }
