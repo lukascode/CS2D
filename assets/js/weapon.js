@@ -11,6 +11,8 @@ var default_deagle_bulletsNumber = 10;
 var default_m249_bulletsNumber = 100;
 
 
+Phaser.Weapon.prototype.changeAngle
+
 function Weapon(key, x, y) {
     this.key = key;
 
@@ -18,11 +20,14 @@ function Weapon(key, x, y) {
     this.sprite.anchor.setTo(0.5, 0.5);
 
     //testowo pociski
-    // var weapon = game.add.weapon(30, 'bullet');
-    // weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-    // weapon.bulletSpeed = 600;
-    // weapon.fireRate = 100;
-    // weapon.trackSprite(this.sprite, 0, 0, true);
+    var weapon = game.add.weapon(30, 'bullet');
+    weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+    weapon.bulletSpeed = 1000;
+    weapon.fireRate = 100;
+    weapon.trackSprite(this.sprite, 0, 0, true);
+    //weapon.fireAngle = 150;
+    //weapon.bulletAngleVariance = 20; - losowy kat strzalu
+    //weapon.bulletAngleOffset = 90; obraca pocisk
 
     ///
 
@@ -93,7 +98,10 @@ function Weapon(key, x, y) {
         if(isTimeElapsedForNextShoot()) {
             if(this.bullets > 0) {
                 playShootSound();
-                //weapon.fire();
+                this.sprite.angle -= 90;
+                weapon.fire();
+                this.sprite.angle += 90;
+                console.log('fireAngle: ' + weapon.fireAngle);
                 if(key != 'knife') this.bullets -= 1;
             } else { noammo.restart(); }
         }

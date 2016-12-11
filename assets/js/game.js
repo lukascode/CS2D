@@ -29,7 +29,8 @@ window.onload = function() {
         game.load.image('ak47', 'assets/cs2d-resources/gfx/weapons2/ak47.png');
         game.load.image('m249', 'assets/cs2d-resources/gfx/weapons2/m249.png');
         game.load.image('xm1014', 'assets/cs2d-resources/gfx/weapons2/xm1014.png');
-        game.load.image('knife', 'assets/cs2d-resources/gfx/weapons2/knife.png')
+        game.load.image('knife', 'assets/cs2d-resources/gfx/weapons2/knife.png');
+        game.load.image('bullet', 'assets/cs2d-resources/gfx/weapons2/bullet.png');
 
         //pointer
         game.load.spritesheet('pointer', 'assets/cs2d-resources/gfx/pointer2.png', 23, 23, 4);
@@ -79,12 +80,12 @@ window.onload = function() {
         player2 = new Character('terrorist', 580, 430, true);
 
         //pointer
-        // pointer = game.add.sprite(game.input.mousePointer.x, game.input.mousePointer.y, 'pointer', 0);
-        // game.physics.enable(pointer);
+        pointer = game.add.sprite(game.input.mousePointer.x, game.input.mousePointer.y, 'pointer', 0);
+        game.physics.enable(pointer);
 
-        // game.input.addMoveCallback = function(pointer, x, y) {
-        //     console.log(x + ' ' + y);
-        // }
+        game.input.addMoveCallback = function(pointer, x, y) {
+            console.log(x + ' ' + y);
+        }
 
 
     }
@@ -92,7 +93,7 @@ window.onload = function() {
     function update() {
 
         player2.update();
-        // updatePointer();
+         updatePointer();
 
         if(cursors.left.isDown) {
 
@@ -107,10 +108,10 @@ window.onload = function() {
 
     }
 
-    // function updatePointer() {
-    //     pointer.x = game.input.activePointer.position.x;
-    //     pointer.y = game.input.activePointer.position.y;
-    // }
+    function updatePointer() {
+        pointer.x = game.input.activePointer.position.x;
+        pointer.y = game.input.activePointer.position.y;
+    }
 
     function render() {
 
