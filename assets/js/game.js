@@ -1,12 +1,13 @@
-
-var WIDTH = 1024;
-var HEIGHT = 576;
 var game;
-window.onload = function() {
-    game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, '',
-    { preload: preload, create: create, update: update });
+var map;
+var layer;
+var cursors;
+var player;
+var pointer;
+var bot;
 
-    function preload() {
+var Game = {
+    preload: function() {
 
         game.stage.backgroundColor = '#000';
 
@@ -49,17 +50,9 @@ window.onload = function() {
         game.load.audio('dirt3', 'assets/cs2d-resources/sfx/player2/pl_dirt3.wav');
         game.load.audio('dirt4', 'assets/cs2d-resources/sfx/player2/pl_dirt4.wav');
 
-    }
+    },
 
-    var map;
-    var layer;
-    var cursors;
-    var player;
-    var pointer;
-    var bot;
-
-
-    function create() {
+    create: function() {
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -88,18 +81,19 @@ window.onload = function() {
         pointer = game.add.sprite(game.input.mousePointer.x, game.input.mousePointer.y, 'pointer', 1);
         pointer.anchor.setTo(0.5, 0.5);
         game.physics.enable(pointer);
+        unvisibleCursor();
 
-    }
+    },
 
-    function update() {
+    update: function() {
 
         player.update();
         bot.update();
         updatePointer();
 
-         game.physics.arcade.collide(player.sprite, layer);
+        game.physics.arcade.collide(player.sprite, layer);
 
-        if(bot.islive) {
+        if (bot.islive) {
             player.weapons[player.currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
                 game.physics.arcade.collide(bot.sprite, spriteBullet, function() {
                     bot.takeLife(10);
@@ -110,26 +104,24 @@ window.onload = function() {
 
         game.physics.arcade.collide(bot.sprite, layer);
 
-        if(cursors.left.isDown) {
+        if (cursors.left.isDown) {
+
+        } else if (cursors.right.isDown) {
 
         }
-        else if(cursors.right.isDown) {
 
-        }
-
-        if(cursors.up.isDown) {
+        if (cursors.up.isDown) {
 
         }
 
     }
+}
 
-    function updatePointer() {
-        pointer.x = game.camera.x + game.input.activePointer.position.x;
-        pointer.y = game.camera.y + game.input.activePointer.position.y;
-    }
+function updatePointer() {
+    pointer.x = game.camera.x + game.input.activePointer.position.x;
+    pointer.y = game.camera.y + game.input.activePointer.position.y;
+}
 
-    function render() {
-
-    }
-
+function unvisibleCursor() {
+    $("body").css("cursor","none");
 }
