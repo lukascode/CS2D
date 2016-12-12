@@ -47,8 +47,16 @@ function Character(key, x, y, cameraFollow, controller) {
     this.spriteReloadAnimation = this.sprite.animations.add('reloadAnimation', [0, 1, 2, 3, 4, 5]);
 
     var life = defaultLife;
+    this.islive = true;
     this.getLife = function() { return life; }
-    this.takeLife = function(value) { life -= value; }
+    this.takeLife = function(value) {
+        life -= value;
+        if(life <= 0) {
+            this.islive = false;
+            this.kill();
+        }
+    }
+
 
     //weapons
     this.weapons = [ new Weapon('knife', x, y), new Weapon('xm1014', x, y), new Weapon('ak47', x, y), new Weapon('m249', x, y) ];
@@ -118,7 +126,9 @@ function Character(key, x, y, cameraFollow, controller) {
     }
 
     this.kill = function() {
-
+        this.legs.kill();
+        this.sprite.kill();
+        this.weapons[this.currentWeapon].sprite.kill();
     }
 
     this.setPosition = function(x, y) {

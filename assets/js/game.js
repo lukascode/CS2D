@@ -54,10 +54,8 @@ window.onload = function() {
     var map;
     var layer;
     var cursors;
-
     var player;
     var pointer;
-
     var bot;
 
 
@@ -100,6 +98,17 @@ window.onload = function() {
         updatePointer();
 
          game.physics.arcade.collide(player.sprite, layer);
+
+        if(bot.islive) {
+            player.weapons[player.currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
+                game.physics.arcade.collide(bot.sprite, spriteBullet, function() {
+                    bot.takeLife(10);
+                    spriteBullet.kill();
+                });
+            }, this);
+        }
+
+        game.physics.arcade.collide(bot.sprite, layer);
 
         if(cursors.left.isDown) {
 
