@@ -52,8 +52,9 @@ function Character(key, x, y, cameraFollow, controller) {
 
     //weapons
     this.weapons = [ new Weapon('knife', x, y), new Weapon('xm1014', x, y), new Weapon('ak47', x, y), new Weapon('m249', x, y) ];
-    for(var i=1; i<this.weapons.length; ++i) { this.weapons[i].invisible(); }
-    this.currentWeapon = 0;
+    for(var i=0; i<this.weapons.length; ++i) { this.weapons[i].invisible(); }
+    this.currentWeapon = Math.floor(Math.random()*this.weapons.length);
+    this.weapons[this.currentWeapon].visible();
 
     this.switchWeapon = function() {
         this.weapons[this.currentWeapon].invisible();

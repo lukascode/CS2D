@@ -55,9 +55,10 @@ window.onload = function() {
     var layer;
     var cursors;
 
-    var player2;
+    var player;
     var pointer;
 
+    var bot;
 
 
     function create() {
@@ -79,26 +80,26 @@ window.onload = function() {
 
         cursors = game.input.keyboard.createCursorKeys();
 
-        player2 = new Character('terrorist', 580, 430, true, userController);
+        player = new Character('terrorist', 580, 430, true, userController);
+
+        bot = new Character('police', 600, 350, false, AIController);
+
+
 
         //pointer
         pointer = game.add.sprite(game.input.mousePointer.x, game.input.mousePointer.y, 'pointer', 1);
         pointer.anchor.setTo(0.5, 0.5);
         game.physics.enable(pointer);
 
-        game.input.addMoveCallback = function(pointer, x, y) {
-            //console.log(x + ' ' + y);
-        }
-
-
     }
 
     function update() {
 
-        player2.update();
-         updatePointer();
+        player.update();
+        bot.update();
+        updatePointer();
 
-         game.physics.arcade.collide(player2.sprite, layer);
+         game.physics.arcade.collide(player.sprite, layer);
 
         if(cursors.left.isDown) {
 
