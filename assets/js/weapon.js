@@ -17,17 +17,15 @@ function Weapon(key, x, y) {
     this.sprite = game.add.sprite(x, y, key);
     this.sprite.anchor.setTo(0.5, 0.5);
 
-    //testowo pociski
-    var weapon = game.add.weapon(30, 'bullet');
-    weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-    weapon.bulletSpeed = 5000;
+    //bullets
+    this.weapon = game.add.weapon(30, 'bullet');
+    this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+    this.weapon.bulletSpeed = 2000;//5000;
     //weapon.fireRate = 100;
-    weapon.trackSprite(this.sprite, 0, 0, true);
-    //weapon.fireAngle = 150;
-    //weapon.bulletAngleVariance = 20; - losowy kat strzalu
-    //weapon.bulletAngleOffset = 90; obraca pocisk
+    this.weapon.trackSprite(this.sprite, 0, 0, true);
+    //weapon.bulletCollideWorldBounds = true; - kolizja ze swiatem
+    //weapon.bullets.enableBody = true;
 
-    ///
 
     if(key == 'knife') {
         this.sprite.scale.setTo(-2, 2);
@@ -97,7 +95,7 @@ function Weapon(key, x, y) {
             if(this.bullets > 0) {
                 playShootSound();
                 this.sprite.angle -= 90;
-                if(this.key != 'knife') weapon.fire();
+                if(this.key != 'knife') this.weapon.fire();
                 this.sprite.angle += 90;
                 if(key != 'knife') this.bullets -= 1;
             } else { noammo.restart(); }

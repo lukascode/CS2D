@@ -47,13 +47,22 @@ function Character(key, x, y, cameraFollow, controller) {
     this.spriteReloadAnimation = this.sprite.animations.add('reloadAnimation', [0, 1, 2, 3, 4, 5]);
 
     var life = defaultLife;
+    this.islive = true;
     this.getLife = function() { return life; }
-    this.takeLife = function(value) { life -= value; }
+    this.takeLife = function(value) {
+        life -= value;
+        if(life <= 0) {
+            this.islive = false;
+            this.kill();
+        }
+    }
+
 
     //weapons
     this.weapons = [ new Weapon('knife', x, y), new Weapon('xm1014', x, y), new Weapon('ak47', x, y), new Weapon('m249', x, y) ];
-    for(var i=1; i<this.weapons.length; ++i) { this.weapons[i].invisible(); }
-    this.currentWeapon = 0;
+    for(var i=0; i<this.weapons.length; ++i) { this.weapons[i].invisible(); }
+    this.currentWeapon = Math.floor(Math.random()*this.weapons.length);
+    this.weapons[this.currentWeapon].visible();
 
     this.switchWeapon = function() {
         this.weapons[this.currentWeapon].invisible();
@@ -117,7 +126,9 @@ function Character(key, x, y, cameraFollow, controller) {
     }
 
     this.kill = function() {
-
+        this.legs.kill();
+        this.sprite.kill();
+        this.weapons[this.currentWeapon].sprite.kill();
     }
 
     this.setPosition = function(x, y) {
