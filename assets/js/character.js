@@ -84,10 +84,14 @@ function Character(key, x, y, cameraFollow, controller) {
 
     //audio
     var dirt1 = game.add.audio('dirt1');
+    var die = game.add.audio('die');
 
     this.playWalkSound = function() {
         if(!dirt1.isPlaying)
             dirt1.restart();
+    }
+    this.playDieSound = function() {
+        die.restart();
     }
 
 
@@ -125,10 +129,9 @@ function Character(key, x, y, cameraFollow, controller) {
         this.changeSpriteFrameDependsOnWeapon();
     }
 
-    this.kill = function() {
-        this.legs.kill();
-        this.sprite.kill();
+    this.kill = function() {                                                                                                                              
         this.weapons[this.currentWeapon].sprite.kill();
+        this.playDieSound();AZ
     }
 
     this.setPosition = function(x, y) {

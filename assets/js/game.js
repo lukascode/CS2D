@@ -2,9 +2,11 @@ var game;
 var map;
 var layer;
 var cursors;
-var player;
+//var player;
 var pointer;
-var bot;
+//var bot;
+
+var characters;
 
 var Game = {
     preload: function() {
@@ -37,6 +39,7 @@ var Game = {
         game.load.spritesheet('pointer', 'assets/cs2d-resources/gfx/pointer2.png', 23, 23, 4);
 
         //audio
+        //weapon
         game.load.audio('ak47_shoot', 'assets/cs2d-resources/sfx/weapons2/ak47.wav');
         game.load.audio('deagle_shoot', 'assets/cs2d-resources/sfx/weapons2/deagle.wav');
         game.load.audio('m249_shoot', 'assets/cs2d-resources/sfx/weapons2/m249.wav');
@@ -45,10 +48,12 @@ var Game = {
         game.load.audio('reload_weapon', 'assets/cs2d-resources/sfx/weapons2/reload.wav');
         game.load.audio('reload_weapon2', 'assets/cs2d-resources/sfx/weapons2/reload2.wav');
 
+        //character
         game.load.audio('dirt1', 'assets/cs2d-resources/sfx/player2/pl_dirt1.wav');
         game.load.audio('dirt2', 'assets/cs2d-resources/sfx/player2/pl_dirt2.wav');
         game.load.audio('dirt3', 'assets/cs2d-resources/sfx/player2/pl_dirt3.wav');
         game.load.audio('dirt4', 'assets/cs2d-resources/sfx/player2/pl_dirt4.wav');
+        game.load.audio('die', 'assets/cs2d-resources/sfx/player2/die2.wav');
 
     },
 
@@ -71,10 +76,16 @@ var Game = {
 
         cursors = game.input.keyboard.createCursorKeys();
 
-        player = new Character('terrorist', 580, 430, true, userController);
+        //player = new Character('terrorist', 580, 430, true, userController);
 
-        bot = new Character('police', 600, 350, false, AIController);
+        //bot = new Character('police', 600, 350, false, AIController);
 
+        characters = [
+                        new Character('terrorist', 580, 430, true, userController),
+                        new Character('police', 600, 350, false, AIController),
+                        new Character('police', 570, 350, false, AIController),
+                        new Character('police', 570, 550, false, AIController)
+                    ];
 
 
         //pointer
@@ -86,23 +97,66 @@ var Game = {
     },
 
     update: function() {
-
-        player.update();
-        bot.update();
-        updatePointer();
-
-        game.physics.arcade.collide(player.sprite, layer);
-
-        if (bot.islive) {
-            player.weapons[player.currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
-                game.physics.arcade.collide(bot.sprite, spriteBullet, function() {
-                    bot.takeLife(10);
-                    spriteBullet.kill();
-                });
-            }, this);
+        //update objects
+        //player.update();
+        //bot.update();
+        for(var i=0; i<characters.length; ++i) {
+            if(characters[i].islive) {
+                characters[i].update();
+            }
         }
 
-        game.physics.arcade.collide(bot.sprite, layer);
+        updatePointer();
+
+        //bullet kill character
+            // for(var k=0; k<characters.length; ++k) {
+            //     if(characters[k].islive) {
+            //         for(var l=0; l<characters.length; ++l) {
+            //             if((k != l) && characters[l].islive) {
+            //                 characters[k].weapons[characters[k].currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
+            //                     game.physics.arcade.collide(characters[l].sprite, spriteBullet, function() {
+            //                         characters[l].takeLife(10);
+            //                         spriteBullet.kill();
+            //                     }, this);
+            //                 });
+            //             }
+            //         }
+            //     }
+            // }
+
+        for(var k=1; k<characters.length; ++k) {
+            characters[0].weapons[characters[0].currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
+                    game.physics.arcade.collide(characters[k].sprite, spriteBullet, function() {
+                        characters[k].takeLife(10);
+                        spriteBullet.kill();
+                    });
+                }, this);
+        }
+
+        //collisions
+        //characters with map and bullets with map
+        for(var j=0; j<characters.length; ++j) {
+            if(characters[j].islive) {
+                game.physics.arcade.collide(characters[j].sprite, layer);
+                characters[j].weapons[characters[j].currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
+                    game.physics.arcade.collide(spriteBullet, layer, function() {
+                        spriteBullet.kill();
+                    });
+                });
+            }
+        }
+
+        // if (bot.islive) {
+        //     player.weapons[player.currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
+        //         game.physics.arcade.collide(bot.sprite, spriteBullet, function() {
+        //             bot.takeLife(10);
+        //             spriteBullet.kill();
+        //         });
+        //     }, this);
+        // }
+
+
+    //    game.physics.arcade.collide(bot.sprite, layer);
 
         if (cursors.left.isDown) {
 
