@@ -6,7 +6,7 @@ var userController = function() {
         this.updateBody();
 
         if(game.input.keyboard.isDown(Phaser.Keyboard.W)) { this.goForward(); }
-        else { this.legsAnimation.loop = false; }
+        else { this.stopGoForward(); }
 
         if(game.input.keyboard.isDown(Phaser.Keyboard.S)) {
             this.goDown();
@@ -29,6 +29,6 @@ var userController = function() {
         if(game.input.keyboard.isDown(Phaser.Keyboard.SHIFT)) { this.runModeOn(); }
         else { this.runModeOff(); }
         if(game.input.mousePointer.isDown) {
-                this.weapons[this.currentWeapon].shoot();
+                this.shoot();
         }
 }

@@ -20,7 +20,7 @@ function Weapon(key, x, y) {
     //bullets
     this.weapon = game.add.weapon(30, 'bullet');
     this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-    this.weapon.bulletSpeed = 1000;//5000;
+    this.weapon.bulletSpeed = 2000;//5000;
     //weapon.fireRate = 100;
     this.weapon.trackSprite(this.sprite, 0, 0, true);
     //weapon.bulletCollideWorldBounds = true; - kolizja ze swiatem

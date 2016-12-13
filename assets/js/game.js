@@ -81,10 +81,10 @@ var Game = {
         //bot = new Character('police', 600, 350, false, AIController);
 
         characters = [
-                        new Character('terrorist', 580, 430, true, userController),
-                        new Character('police', 600, 350, false, AIController),
-                        new Character('police', 570, 350, false, AIController),
-                        new Character('police', 570, 550, false, AIController)
+                        new Character('terrorist', 240, 680, true, userController),
+                        new Character('police', 240, 250, false, AIController),
+                        new Character('police', 640, 350, false, AIController),
+                        new Character('police', 750, 900, false, AIController)
                     ];
 
 
@@ -112,7 +112,7 @@ var Game = {
             for(var k=0; k<characters.length; ++k) {
                 if(characters[k].islive) {
                     for(var l=0; l<characters.length; ++l) {
-                        if((k != l) && characters[l].islive) {
+                        if((k != l) && characters[l].islive && (characters[k].key != characters[l].key)) {
                             characters[k].weapons[characters[k].currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
                                     game.physics.arcade.collide(characters[l].sprite, spriteBullet, function() {
                                         characters[l].takeLife(10);
