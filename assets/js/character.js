@@ -129,9 +129,11 @@ function Character(key, x, y, cameraFollow, controller) {
         this.changeSpriteFrameDependsOnWeapon();
     }
 
-    this.kill = function() {                                                                                                                              
+    this.kill = function() {
+        this.legs.kill();
+        this.sprite.kill();                                                                                                                              
         this.weapons[this.currentWeapon].sprite.kill();
-        this.playDieSound();AZ
+        this.playDieSound();
     }
 
     this.setPosition = function(x, y) {

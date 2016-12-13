@@ -109,29 +109,20 @@ var Game = {
         updatePointer();
 
         //bullet kill character
-            // for(var k=0; k<characters.length; ++k) {
-            //     if(characters[k].islive) {
-            //         for(var l=0; l<characters.length; ++l) {
-            //             if((k != l) && characters[l].islive) {
-            //                 characters[k].weapons[characters[k].currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
-            //                     game.physics.arcade.collide(characters[l].sprite, spriteBullet, function() {
-            //                         characters[l].takeLife(10);
-            //                         spriteBullet.kill();
-            //                     }, this);
-            //                 });
-            //             }
-            //         }
-            //     }
-            // }
-
-        for(var k=1; k<characters.length; ++k) {
-            characters[0].weapons[characters[0].currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
-                    game.physics.arcade.collide(characters[k].sprite, spriteBullet, function() {
-                        characters[k].takeLife(10);
-                        spriteBullet.kill();
-                    });
-                }, this);
-        }
+            for(var k=0; k<characters.length; ++k) {
+                if(characters[k].islive) {
+                    for(var l=0; l<characters.length; ++l) {
+                        if((k != l) && characters[l].islive) {
+                            characters[k].weapons[characters[k].currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
+                                    game.physics.arcade.collide(characters[l].sprite, spriteBullet, function() {
+                                        characters[l].takeLife(10);
+                                        spriteBullet.kill();
+                                    });
+                            }, this);
+                        }
+                    }
+                }
+            }
 
         //collisions
         //characters with map and bullets with map
@@ -142,21 +133,10 @@ var Game = {
                     game.physics.arcade.collide(spriteBullet, layer, function() {
                         spriteBullet.kill();
                     });
-                });
+                }, this);
             }
         }
 
-        // if (bot.islive) {
-        //     player.weapons[player.currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
-        //         game.physics.arcade.collide(bot.sprite, spriteBullet, function() {
-        //             bot.takeLife(10);
-        //             spriteBullet.kill();
-        //         });
-        //     }, this);
-        // }
-
-
-    //    game.physics.arcade.collide(bot.sprite, layer);
 
         if (cursors.left.isDown) {
 
