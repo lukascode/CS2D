@@ -13,7 +13,7 @@ var defaultWeaponPivotValueXM1014 = { x: 0, y: 21 };
 var defaultWeaponPivotValueKNIFE = { x: 0, y: 10 };
 
 function Character(key, x, y, cameraFollow, controller) {
-
+    this.key = key;
     //legs and legs's animation
     this.legs = game.add.sprite(x, y, 'legs', 0);
     game.physics.enable(this.legs);
@@ -25,6 +25,7 @@ function Character(key, x, y, cameraFollow, controller) {
     game.physics.enable(this.sprite);
     this.sprite.anchor.setTo(0.5, 0.5);
     this.sprite.body.collideWorldBounds = true;
+    this.sprite.angle = Math.floor(Math.random()*361);
 
     if(cameraFollow) {
         game.camera.follow(this.sprite);
@@ -61,7 +62,7 @@ function Character(key, x, y, cameraFollow, controller) {
     //weapons
     this.weapons = [ new Weapon('knife', x, y), new Weapon('xm1014', x, y), new Weapon('ak47', x, y), new Weapon('m249', x, y) ];
     for(var i=0; i<this.weapons.length; ++i) { this.weapons[i].invisible(); }
-    this.currentWeapon = Math.floor(Math.random()*this.weapons.length);
+    this.currentWeapon = Math.floor(Math.random()*(this.weapons.length-1)+1); // narazie knife nie moze byc wylosowany
     this.weapons[this.currentWeapon].visible();
 
     this.switchWeapon = function() {
@@ -122,16 +123,24 @@ function Character(key, x, y, cameraFollow, controller) {
         }
         this.playWalkSound();
     }
+    this.stopGoForward = function() {
+        this.sprite.body.velocity.setTo(0, 0);
+        this.legs.body.velocity.setTo(0, 0);
+        this.legsAnimation.loop = false;
+    }
 
     this.updateBody = function() {
         this.updateLegs();
         this.updateWeapon();
         this.changeSpriteFrameDependsOnWeapon();
     }
+    this.shoot = function() {
+        this.weapons[this.currentWeapon].shoot();
+    }
 
     this.kill = function() {
         this.legs.kill();
-        this.sprite.kill();                                                                                                                              
+        this.sprite.kill();
         this.weapons[this.currentWeapon].sprite.kill();
         this.playDieSound();
     }
