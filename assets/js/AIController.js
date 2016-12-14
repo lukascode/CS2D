@@ -13,12 +13,14 @@ var AIController = function() {
         }
     }
 
-
-
-    if((game.physics.arcade.distanceBetween(this.sprite, characters[0].sprite) < 380) && characters[0].islive) {
+    if((game.physics.arcade.distanceBetween(this.sprite, characters[0].sprite) < 500) && characters[0].islive) {
         this.sprite.rotation = game.physics.arcade.angleBetween(this.sprite, characters[0].sprite) + Math.PI/2;
-        this.shoot();
-    }
+        if((game.physics.arcade.distanceBetween(this.sprite, characters[0].sprite) < 300)) {
+            this.stopGoForward();
+            this.shoot();
+        } else this.goForward();
+
+    } else this.stopGoForward();
 
     this.updateBody();
 

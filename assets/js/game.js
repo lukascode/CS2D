@@ -2,10 +2,7 @@ var game;
 var map;
 var layer;
 var cursors;
-//var player;
 var pointer;
-//var bot;
-
 var characters;
 
 var Game = {
@@ -76,13 +73,9 @@ var Game = {
 
         cursors = game.input.keyboard.createCursorKeys();
 
-        //player = new Character('terrorist', 580, 430, true, userController);
-
-        //bot = new Character('police', 600, 350, false, AIController);
-
         characters = [
-                        new Character('terrorist', 240, 680, true, userController),
-                        new Character('police', 240, 250, false, AIController),
+                        new Character('terrorist', 1950/*240*/, 680, true, userController),
+                        new Character('police', 240, 200, false, AIController),
                         new Character('police', 640, 350, false, AIController),
                         new Character('police', 750, 900, false, AIController)
                     ];
@@ -97,9 +90,6 @@ var Game = {
     },
 
     update: function() {
-        //update objects
-        //player.update();
-        //bot.update();
         for(var i=0; i<characters.length; ++i) {
             if(characters[i].islive) {
                 characters[i].update();
@@ -115,7 +105,7 @@ var Game = {
                         if((k != l) && characters[l].islive && (characters[k].key != characters[l].key)) {
                             characters[k].weapons[characters[k].currentWeapon].weapon.bullets.forEachExists(function(spriteBullet) {
                                     game.physics.arcade.collide(characters[l].sprite, spriteBullet, function() {
-                                        characters[l].takeLife(10);
+                                        characters[l].takeLife(characters[k].weapons[characters[k].currentWeapon].damage);
                                         spriteBullet.kill();
                                     });
                             }, this);

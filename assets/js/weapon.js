@@ -10,6 +10,12 @@ var default_ak47_bulletsNumber = 30;
 var default_deagle_bulletsNumber = 10;
 var default_m249_bulletsNumber = 100;
 
+//weapon damages
+var default_ak47_damage = 15;
+var default_deagle_damage = 50;
+var default_m249_damage = 8;
+var default_knife_damage = 100;
+
 
 function Weapon(key, x, y) {
     this.key = key;
@@ -71,6 +77,7 @@ function Weapon(key, x, y) {
     }
 
     this.bullets = getBulletsNumber();
+    this.damage = getDamageNumber();
 
     this.reload = function() {
         if(this.key != 'knife') {
@@ -86,6 +93,15 @@ function Weapon(key, x, y) {
             case 'ak47':   return default_ak47_bulletsNumber;
             case 'm249':   return default_m249_bulletsNumber;
             case 'xm1014': return default_deagle_bulletsNumber;
+            case 'knife': return 1;
+        }
+    }
+
+    function getDamageNumber() {
+        switch(key) {
+            case 'ak47':   return default_ak47_damage;
+            case 'm249':   return default_m249_damage;
+            case 'xm1014': return default_deagle_damage;
             case 'knife': return 1;
         }
     }
