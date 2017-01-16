@@ -21,7 +21,7 @@ function Character(key, x, y, cameraFollow, controller) {
     this.legsAnimation = this.legs.animations.add('legsAnimation', [0, 1, 2, 3, 4, 5, 6, 7]);
 
     //main character's sprite
-    this.sprite = game.add.sprite(x, y, key, 1);
+    this.sprite = game.add.sprite(x*32+16, y*32+16, key, 1);
     game.physics.enable(this.sprite);
     this.sprite.anchor.setTo(0.5, 0.5);
     this.sprite.body.collideWorldBounds = true;

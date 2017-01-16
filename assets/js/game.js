@@ -59,7 +59,7 @@ var Game = {
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
         //background
-        game.add.tileSprite(0, 0, 2080, 1440, 'background');
+        game.add.tileSprite(0, 0, 2080, 1440, 'background'); //65x45 tiles
 
         //map
         map = game.add.tilemap('takedown');
@@ -74,10 +74,12 @@ var Game = {
         cursors = game.input.keyboard.createCursorKeys();
 
         characters = [
-                        new Character('terrorist', 1950/*240*/, 680, true, userController),
-                        new Character('police', 240, 200, false, AIController),
-                        new Character('police', 640, 350, false, AIController),
-                        new Character('police', 750, 900, false, AIController)
+                        new Character('terrorist', 7, 19, true, userController),
+                        new Character('police', 54, 13, false, AIController),
+                        new Character('police', 49, 18, false, AIController),
+                        new Character('police', 42, 37, false, AIController),
+                        new Character('terrorist', 24, 4, false, AIController),
+                        new Character('terrorist', 33, 11, false, AIController)
                     ];
 
 

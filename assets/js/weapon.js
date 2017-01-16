@@ -22,6 +22,7 @@ function Weapon(key, x, y) {
 
     this.sprite = game.add.sprite(x, y, key);
     this.sprite.anchor.setTo(0.5, 0.5);
+    game.physics.enable(this.sprite);
 
     //bullets
     this.weapon = game.add.weapon(30, 'bullet');

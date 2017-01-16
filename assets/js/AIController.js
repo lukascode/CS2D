@@ -18,7 +18,7 @@ var AIController = function() {
         if((game.physics.arcade.distanceBetween(this.sprite, characters[0].sprite) < 300)) {
             this.stopGoForward();
             this.shoot();
-        } else this.goForward();
+        } /*else this.goForward();*/
 
     } else this.stopGoForward();
 
